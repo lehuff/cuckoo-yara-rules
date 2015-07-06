@@ -45,6 +45,7 @@ for each in zips:
             if not os.path.exists(dirname):
                 os.makedirs(dirname)
             zfile.extract(name, dirname)
+        os.remove(cwd + "/" + each)
     except Exception as e:
         print(e)
 
@@ -54,7 +55,7 @@ for root, dirs, files in os.walk(cwd):
     for file in files:
         if file.endswith('.yar'):
             yarFiles.append(os.path.join(root, file))
-
+            
 lFile = open('yara-rules-repo.yar', 'wb')
 
 for value in yarFiles:
