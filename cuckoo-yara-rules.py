@@ -9,7 +9,7 @@ import glob
 import zipfile
 import os.path
 from macpath import dirname
-
+import sys
 
 #Grab the current working directory for future use.
 cwd = os.getcwd()
@@ -23,6 +23,7 @@ repos = ['https://github.com/x64dbg/yarasigs/archive/master.zip',
          'https://github.com/schladt/public_yara_sigs/archive/master.zip'
          ]
 etc = 1
+print('Starting')
 for each in repos:
     try:
         file = urllib2.urlopen(each)
@@ -32,7 +33,7 @@ for each in repos:
         etc += 1
     except Exception as e:
         print(e)   
-         
+print ("Downlading Yara Files")
 zips = []
 zipList = glob.glob('*.zip')
 zips.extend(zipList)
@@ -48,7 +49,7 @@ for each in zips:
         os.remove(cwd + "/" + each)
     except Exception as e:
         print(e)
-
+print("Extracting Yara Files")
 yarFiles = []
 
 for root, dirs, files in os.walk(cwd):
@@ -57,10 +58,12 @@ for root, dirs, files in os.walk(cwd):
             yarFiles.append(os.path.join(root, file))
             
 lFile = open('yara-rules-repo.yar', 'wb')
-
+print("Writing yara-includes file")
 for value in yarFiles:
     try:
         lFile.write('include ' + '"' + value + '"\n')
     except Exception as e:
         print(e)
 lFile.close()
+
+print ('Done!')
