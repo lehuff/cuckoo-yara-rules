@@ -10,17 +10,14 @@ import zipfile
 import os.path
 from macpath import dirname
 import sys
+import subprocess
 
 #Grab the current working directory for future use.
 cwd = os.getcwd()
 repo_path = cwd
 
 #Insert repos to clone here.
-repos = ['https://github.com/x64dbg/yarasigs/archive/master.zip',
-         'https://github.com/Yara-Rules/rules/archive/master.zip',
-         'https://github.com/hiddenillusion/yara-goodies/archive/master.zip',
-         'https://github.com/mjruffin/malware_signatures/archive/master.zip',
-         'https://github.com/schladt/public_yara_sigs/archive/master.zip'
+repos = ['https://github.com/Yara-Rules/rules/archive/master.zip'
          ]
 etc = 1
 print('Starting')
@@ -56,6 +53,8 @@ for root, dirs, files in os.walk(cwd):
     for file in files:
         if file.endswith('.yar'):
             yarFiles.append(os.path.join(root, file))
+        elif file.endswith('.yara'):
+            yarFiles.append(os.path.join(root, file))
             
 lFile = open('yara-rules-repo.yar', 'wb')
 print("Writing yara-includes file")
@@ -65,5 +64,5 @@ for value in yarFiles:
     except Exception as e:
         print(e)
 lFile.close()
-
+subprocess.check_output('cat yara-rules-repo.yar >> index_binaries.yar', shell=True)
 print ('Done!')
